@@ -1,0 +1,21 @@
+#logo {
+    font-family: 'Italiana', sans-serif;
+}
+
+.navbar {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-menu {
+    background-color: #F8F7F4;
+    font-size: 14px;
+}
+
+.dropdown-item {
+    color: #857c7a;
+}
+
+.dropdown-item:hover {
+    background-color: #F8F7F4;
+    color: rgba(0,0,0,.7);
+}

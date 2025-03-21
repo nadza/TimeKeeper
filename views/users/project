@@ -1,0 +1,73 @@
+<div class="container mt-5">
+    <!-- Button trigger modal -->
+    <button id="addProject" type="button" class="btn btn-outline-dark mb-3" data-toggle="modal" data-target="#myModal">
+        <i class="fa fa-plus"></i> Create A Project </button>
+
+    <button id="addProjectToUser" type="button" class="btn btn-outline-dark mb-3" data-toggle="modal" data-target="#myModal">
+        Project<i class="fa fa-plus ml-2 mr-2"></i>User</button>
+
+    <button id="addTeamToProject" type="button" class="btn btn-outline-dark mb-3" data-toggle="modal" data-target="#myModal">
+        Project<i class="fa fa-plus ml-2 mr-2"></i>Team</button>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Create A Project </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
+                    <button id="saveChanges" type="button" class="btn btn-outline-dark">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table id="my_table" class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Client</th>
+            <th scope="col">Project</th>
+            <th scope="col">Project manager</th>
+            <th scope="col">Planned start day</th>
+            <th scope="col">Planned end day</th>
+            <th scope="col">Actual start day</th>
+            <th scope="col">Actual end day</th>
+            <th scope="col">Description</th>
+            <th scope="col">Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% projects.forEach(project => { %>
+            <tr>
+                <td><%= project.client_name %></td>
+                <td>
+                    <a href="/projects/<%= project.id %>">
+                        <%= project.project_name %>
+                    </a>
+                </td>
+                <td><%= project.username %></td>
+                <td><%= project.planned_start_date.toLocaleDateString() %></td>
+                <td><%= project.planned_end_date.toLocaleDateString() %></td>
+                <td><%= project.actual_start_date ? project.actual_start_date.toLocaleDateString() : '' %></td>
+                <td><%= project.actual_end_date ? project.actual_end_date.toLocaleDateString() : '' %></td>
+                <td><%= project.description ? project.description : '' %></td>
+                <td><%= project.price %></td>
+                <td>
+                    <form action="<%= `/admin/delete-project/${project.id}` %>" method="POST">
+                        <button type="submit" class="btn-sm btn-outline-dark"
+                                onclick="return confirm('Are you sure you want to delete this record?')">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        <% }); %>
+        </tbody>
+    </table>
+
+</div>

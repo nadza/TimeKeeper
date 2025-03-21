@@ -1,0 +1,36 @@
+<div class="m-3 d-flex align-items-center justify-content-center text-center" style="height:100vh;">
+    <div class="wrapper p-5">
+        <h1 class="mb-4">Time keeper</h1>
+        <form method="POST" action="/register" autocomplete="off">
+            <div class="form-group">
+                <input type="text" name="first_name" class="input_style form-control" id="first_name"
+                       placeholder="First name" pattern="[A-Z][a-z]*" title="Start with a capital letter, followed by lowercase letters" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="last_name" class="input_style form-control" id="last_name"
+                       placeholder="Last name" pattern="[A-Z][a-z]*" title="Start with a capital letter, followed by lowercase letters" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="username" class="input_style form-control" id="username"
+                       placeholder="Username" required>
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" class="input_style form-control" id="email" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" class="input_style form-control" id="password"
+                       placeholder="Password" pattern=".{6,20}" title="Password must be 6 to 20 characters" required>
+            </div>
+            <select name="job_title" class="input_style form-control" required>
+                <% for(let i = jobTitles.length - 1; i >= 7; i--) { %>
+                    <% if (i === jobTitles.length - 1) { %>
+                        <option selected><%= jobTitles[i].title %></option>
+                    <% } else { %>
+                        <option><%= jobTitles[i].title %></option>
+                    <% } %>
+                <% } %>
+            </select>
+            <button type="submit" class="button p-2 btn btn-dark mt-3">Register</button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+<div class="container mt-5">
+    <h3 style="font-family: 'Italiana', sans-serif;">Please ensure to check your email once you've submitted your report request!</h3>
+
+    <h5 class="mt-3" style="font-family: 'Italiana', sans-serif;">Available reports:</h5>
+    <div class="list-group mt-3" style="box-shadow: rgba(0, 0, 0, 0.16) 0 1px 4px;">
+        <% if(role === "admin") { %>
+            <a href="/reports/working-hours-of-employees" class="list-group-item list-group-item-action">Working hours of employees</a>
+            <a href="/reports/hours-projects" class="list-group-item list-group-item-action">Detailed TIME report on the projects</a>
+            <a href="/reports/tasks-projects" class="list-group-item list-group-item-action">Detailed TASK report on the projects</a>
+        <% } else { %>
+            <a href="/reports/user-time-projects" class="list-group-item list-group-item-action">Detailed TIME report on my projects</a>
+            <a href="/reports/user-task-projects" class="list-group-item list-group-item-action">Detailed TASK report on my projects</a>
+        <% } %>
+    </div>
+</div>
+

@@ -1,0 +1,28 @@
+h1 {
+    font-family: 'Italiana', sans-serif;
+    font-size: 10vh;
+    margin-top: 10vh;
+}
+
+.card {
+    background-color: #F8F7F4;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(99%) sepia(79%) saturate(1263%) hue-rotate(322deg) brightness(97%) contrast(92%);
+    margin: 20px;
+}
+
+.carousel-indicators {
+    bottom: 0;
+}
+
+.carousel-indicators li {
+    background-color: #efd37d;
+
+}
+
+.carousel-indicators .active {
+    background-color: #878082;
+}

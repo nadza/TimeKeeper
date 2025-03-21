@@ -1,0 +1,169 @@
+<div class="container mt-5">
+    <button id="savePdfButton" type="button" class="btn btn-outline-dark mb-3">
+        <i class="fa fa-download"></i> Save
+    </button>
+
+    <button id="sendPdfButton" type="button" class="btn btn-outline-dark mb-3">
+        <i class="fa fa-envelope"></i> Send
+    </button>
+
+    <div id="for-pdf">
+        <h3 style="font-family: 'Italiana', sans-serif;">Number of done tasks: <%= number_done[0].number_of_done_tasks %></h3>
+        <table class="table table-striped mt-3 mb-2">
+            <thead>
+            <tr>
+                <th scope="col">Number of done tasks</th>
+                <th scope="col">Project name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% number_of_done_tasks.forEach(t => { %>
+                <tr>
+                    <td><%= t.number_of_done_tasks %></td>
+                    <td><%= t.project_name %></td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+
+        <h3 style="font-family: 'Italiana', sans-serif;">Done tasks: </h3>
+        <table class="table table-striped mt-3 mb-2" id="for-pdf">
+            <thead>
+            <tr>
+                <th scope="col">Task name</th>
+                <th scope="col">Project name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% done_tasks.forEach(t => { %>
+                <tr>
+                    <td><%= t.task_name %></td>
+                    <td><%= t.project_name %></td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+
+        <h3 class="mt-3" style="font-family: 'Italiana', sans-serif;">Number of incomplete tasks: <%= number_undone[0].number_of_undone_tasks %></h3>
+        <table class="table table-striped mt-3 mb-2">
+            <thead>
+            <tr>
+                <th scope="col">Number of incomplete tasks</th>
+                <th scope="col">Project name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% number_of_undone_tasks.forEach(t => { %>
+                <tr>
+                    <td><%= t.number_of_undone_tasks %></td>
+                    <td><%= t.project_name %></td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+
+        <h3 class="mt-3" style="font-family: 'Italiana', sans-serif;">Incomplete tasks: </h3>
+        <table class="table table-striped mt-3 mb-2" id="for-pdf">
+            <thead>
+            <tr>
+                <th scope="col">Task name</th>
+                <th scope="col">Project name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% undone_tasks.forEach(t => { %>
+                <tr>
+                    <td><%= t.task_name %></td>
+                    <td><%= t.project_name %></td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+
+        <h3 style="font-family: 'Italiana', sans-serif;">Number of late tasks: <%= number_late[0].number_of_late_tasks %></h3>
+        <table class="table table-striped mt-3 mb-2">
+            <thead>
+            <tr>
+                <th scope="col">Number of late tasks</th>
+                <th scope="col">Project name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% number_of_late_tasks.forEach(t => { %>
+                <tr>
+                    <td><%= t.number_of_done_tasks %></td>
+                    <td><%= t.project_hours %></td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+
+        <h3 style="font-family: 'Italiana', sans-serif;">Late tasks: </h3>
+        <table class="table table-striped mt-3 mb-2" id="for-pdf">
+            <thead>
+            <tr>
+                <th scope="col">Task name</th>
+                <th scope="col">Project name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% late_tasks.forEach(t => { %>
+                <tr>
+                    <td><%= t.task_name %></td>
+                    <td><%= t.project_name %></td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    window.onload = function() {
+        var element = document.getElementById("for-pdf");
+
+        var options = {
+            margin: [10, 20, 10, 20],
+            filename: 'working_hours_of_employees.pdf',
+        };
+
+        function savePdf() {
+            console.log("kliknut");
+            html2pdf(element, options);
+        }
+
+        var savePdfButton = document.getElementById("savePdfButton");
+        savePdfButton.addEventListener("click", savePdf);
+
+        async function createAndSendPdf() {
+            try {
+                const pdf = await html2pdf(element, options).outputPdf();
+                const base64Pdf = btoa(pdf);
+
+                fetch('/reports/send-tasks-project-pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        pdfData: base64Pdf,
+                        pdfFilename: 'working_hours_of_employees.pdf',
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Email sent:', data);
+                    })
+                    .catch(error => {
+                        console.error('Error sending email:', error);
+                    });
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+            }
+        }
+
+
+        var sendPdfButton = document.getElementById("sendPdfButton");
+        sendPdfButton.addEventListener("click", createAndSendPdf);
+    };
+</script>

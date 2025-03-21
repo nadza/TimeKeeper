@@ -1,0 +1,44 @@
+#wrapper {
+    height: 80vh;
+    margin: 0;
+}
+
+#contains {
+    width: 90vh;
+}
+
+#wrap-row {
+    height: 40vh;
+    box-shadow: rgba(0, 0, 0, 0.16) 0 1px 4px;
+    border-radius: 24px;
+}
+
+#profile {
+    background-color: #f2eddf !important;
+    border-top-left-radius: 24px;
+    border-bottom-left-radius: 24px;
+}
+
+@media (max-width: 767px) {
+    #profile {
+        border-radius: 24px 24px 0 0;
+        max-width: 100%;
+        flex: 0 0 45%;
+    }
+    #info {
+        overflow-y: scroll;
+    }
+}
+
+
+h4 {
+    font-family: 'Italiana', sans-serif;
+}
+
+#information {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+p {
+    font-size: 1.75vh;
+}

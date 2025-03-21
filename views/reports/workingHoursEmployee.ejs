@@ -1,0 +1,78 @@
+<div class="container mt-5">
+    <button id="savePdfButton" type="button" class="btn btn-outline-dark mb-3">
+        <i class="fa fa-download"></i> Save
+    </button>
+
+    <button id="sendPdfButton" type="button" class="btn btn-outline-dark mb-3">
+        <i class="fa fa-envelope"></i> Send
+    </button>
+
+    <table class="table table-striped" id="for-pdf">
+        <thead>
+            <tr>
+                <th scope="col">Username</th>
+                <th scope="col">Login</th>
+                <th scope="col">Logout</th>
+            </tr>
+        </thead>
+        <tbody>
+        <% time.forEach(t => { %>
+            <tr>
+                <td><%= t.username %></td>
+                <td><%= t.login ? t.login.toLocaleString() : '' %></td>
+                <td><%= t.logout ? t.logout.toLocaleString() : '' %></td>
+            </tr>
+        <% }) %>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    window.onload = function() {
+        var element = document.getElementById("for-pdf");
+
+        var options = {
+            margin: [10, 20, 10, 20],
+            filename: 'working_hours_of_employees.pdf',
+        };
+
+        function savePdf() {
+            console.log("kliknut");
+            html2pdf(element, options);
+        }
+
+        var savePdfButton = document.getElementById("savePdfButton");
+        savePdfButton.addEventListener("click", savePdf);
+
+        async function createAndSendPdf() {
+            try {
+                const pdf = await html2pdf(element, options).outputPdf();
+                const base64Pdf = btoa(pdf);
+
+                fetch('/reports/send-working-hours-pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        pdfData: base64Pdf,
+                        pdfFilename: 'working_hours_of_employees.pdf',
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Email sent:', data);
+                    })
+                    .catch(error => {
+                        console.error('Error sending email:', error);
+                    });
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+            }
+        }
+
+
+        var sendPdfButton = document.getElementById("sendPdfButton");
+        sendPdfButton.addEventListener("click", createAndSendPdf);
+    };
+</script>

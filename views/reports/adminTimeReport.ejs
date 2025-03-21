@@ -1,0 +1,117 @@
+<div class="container mt-5">
+    <button id="savePdfButton" type="button" class="btn btn-outline-dark mb-3">
+        <i class="fa fa-download"></i> Save
+    </button>
+
+    <button id="sendPdfButton" type="button" class="btn btn-outline-dark mb-3">
+        <i class="fa fa-envelope"></i> Send
+    </button>
+
+    <div id="for-pdf">
+        <h3 style="font-family: 'Italiana', sans-serif;">Working hours per project: </h3>
+        <table class="table table-striped mt-3 mb-2">
+            <thead>
+            <tr>
+                <th scope="col">Project name</th>
+                <th scope="col">Hours</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% all_times.forEach(t => { %>
+                <tr>
+                    <td><%= t.project_name %></td>
+                    <td><%= t.project_hours %></td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+
+        <h3 style="font-family: 'Italiana', sans-serif;">Average working hours per project: </h3>
+        <table class="table table-striped mt-3 mb-2" id="for-pdf">
+            <thead>
+            <tr>
+                <th scope="col">Project name</th>
+                <th scope="col">Average time</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% avg_times.forEach(t => { %>
+                <tr>
+                    <td><%= t.project_name %></td>
+                    <td><%= t.project_hours %></td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+
+        <h3 style="font-family: 'Italiana', sans-serif;">Working hours per project per user: </h3>
+        <table class="table table-striped mt-3 mb-2" id="for-pdf">
+            <thead>
+            <tr>
+                <th scope="col">Project name</th>
+                <th scope="col">Hours</th>
+                <th scope="col">Employee</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% all_user_times.forEach(t => { %>
+                <tr>
+                    <td><%= t.project_name %></td>
+                    <td><%= t.project_hours %></td>
+                    <td><%= t.username %></td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    window.onload = function() {
+        var element = document.getElementById("for-pdf");
+
+        var options = {
+            margin: [10, 20, 10, 20],
+            filename: 'working_hours_of_employees.pdf',
+        };
+
+        function savePdf() {
+            console.log("kliknut");
+            html2pdf(element, options);
+        }
+
+        var savePdfButton = document.getElementById("savePdfButton");
+        savePdfButton.addEventListener("click", savePdf);
+
+        async function createAndSendPdf() {
+            try {
+                const pdf = await html2pdf(element, options).outputPdf();
+                const base64Pdf = btoa(pdf);
+
+                fetch('/reports/send-hours-project-pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        pdfData: base64Pdf,
+                        pdfFilename: 'working_hours_of_employees.pdf',
+                    }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Email sent:', data);
+                    })
+                    .catch(error => {
+                        console.error('Error sending email:', error);
+                    });
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+            }
+        }
+
+
+        var sendPdfButton = document.getElementById("sendPdfButton");
+        sendPdfButton.addEventListener("click", createAndSendPdf);
+    };
+</script>
