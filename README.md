@@ -9,3 +9,5 @@
 - **Reporting**: Generate detailed reports on work hours, attendance, and project progress, with email and PDF notifications.
 
 Timekeeper streamlines project tracking, helping businesses manage resources and track time accurately across various projects and teams.
+
+This application was created with Node.js.
